@@ -29,11 +29,16 @@ def extract_pdf_content(pdfUrl):
 
     paper_tmp = open(temp_pdf_path, 'wb')
     paper_tmp.write(response.content)
+    paper_tmp.close()
 
-    # Extract text from the temp. PDF.
-    text = textract.process(temp_pdf_path)
+    # Extract text from the temp. PDF. using AI2's Science Parse
+    # https://github.com/allenai/science-parse
+    url = "http://scienceparse.allenai.org/v1"
+    files = {'file': open(temp_pdf_path, 'rb')}
+    headers = {'content-type': 'application/pdf', "accept-charset": "utf-8"}
+    r = requests.post(url, files=files, headers=headers)
 
-    return text
+    return r.text
 
 
 def clean_pdf_content(content):
