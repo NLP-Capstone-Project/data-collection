@@ -50,7 +50,7 @@ def main():
         content = extract_pdf_content(paper_url)
         if content is not None:
             content = clean_pdf_content(content)
-            raw_file_path = os.path.join(args.save_raw_dir, paper_id + ".txt")
+            raw_file_path = os.path.join(args.save_raw_dir, paper_id + ".json")
             with open(raw_file_path, 'w') as f:
                 f.write(content)
                 count += 1
