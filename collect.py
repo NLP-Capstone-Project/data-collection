@@ -18,24 +18,24 @@ def main():
 
     parser.add_argument("--semantic-scholar-data-path", type=str,
                         help="Path to the Semantic Scholar data.")
-    parser.add_argument("--save-raw-dir", type=str,
+    parser.add_argument("--save-dir", type=str,
                         default=os.path.join(
-                            project_root, "data", "raw"),
+                            project_root, "data", "papers"),
                         help="Directory to save research content as"
-                             "text files.")
+                             "JSON files.")
     args = parser.parse_args()
 
     if not os.path.exists(args.semantic_scholar_data_path):
         raise ValueError("Semantic Scholar data path needed for collection.")
 
     try:
-        if os.path.exists(args.save_raw_dir):
+        if os.path.exists(args.save_dir):
             # save directory already exists, do we really want to overwrite?
-            input("Directory for raw text data {} already exists. Press <Enter> "
+            input("Directory for paper data {} already exists. Press <Enter> "
                   "to clear, overwrite and continue , or "
-                  "<Ctrl-c> to abort.".format(args.save_raw_dir))
-            shutil.rmtree(args.save_raw_dir)
-        os.makedirs(args.save_raw_dir)
+                  "<Ctrl-c> to abort.".format(args.save_dir))
+            shutil.rmtree(args.save_dir)
+        os.makedirs(args.save_dir)
     except KeyboardInterrupt:
         print()
         sys.exit(0)
@@ -49,9 +49,8 @@ def main():
     for paper_id, paper_url in tqdm(papers):
         content = extract_pdf_content(paper_url)
         if content is not None:
-            content = clean_pdf_content(content)
-            raw_file_path = os.path.join(args.save_raw_dir, paper_id + ".json")
-            with open(raw_file_path, 'w') as f:
+            paper_json_path = os.path.join(args.save_dir, paper_id + ".json")
+            with open(paper_json_path, 'w') as f:
                 f.write(content)
                 count += 1
 
