@@ -1,9 +1,6 @@
-import os
 import requests
 import re
 import sys
-
-import textract
 
 
 def extract_pdf_content(pdfUrl):

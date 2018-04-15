@@ -1,20 +1,6 @@
 # HTTP Requests for PDFs
 requests
 
-# PDF text extraction dependencies
-python-dev
-libxml2-dev
-libxslt1-dev
-antiword
-unrtf
-poppler-utils
-pstotext
-tesseract-ocr
-libpulse-dev
-
-# Main PDF extraction library
-textract
-
 # Numerical computing
 numpy
 
