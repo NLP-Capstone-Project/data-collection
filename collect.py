@@ -1,13 +1,11 @@
 import argparse
-import json
 import os
 import shutil
 import sys
 
 from tqdm import tqdm
 
-from collection_utils import extract_pdf_content,\
-    clean_pdf_content, extract_pdf_urls_from_json
+from collection_utils import extract_pdf_content, extract_pdf_urls_from_json
 
 
 def main():
