@@ -45,12 +45,18 @@ def main():
     print("Collecting ")
     count = 0
     for paper_id, paper_url in tqdm(papers):
-        content = extract_pdf_content(paper_url)
-        if content is not None:
-            paper_json_path = os.path.join(args.save_dir, paper_id + ".json")
-            with open(paper_json_path, 'w') as f:
-                f.write(content)
-                count += 1
+        try:
+            content = extract_pdf_content(paper_url)
+            if content is not None:
+                paper_json_path = os.path.join(args.save_dir, paper_id + ".json")
+                with open(paper_json_path, 'w') as f:
+                    f.write(content)
+                    count += 1
+        except KeyboardInterrupt:
+            print("Stopping collection early.")
+            break
+        except:
+            pass  # Ignore malformed data.
 
     print()
     print(count, "research papers collected!")
