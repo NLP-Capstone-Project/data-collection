@@ -43,35 +43,19 @@ def main():
     print("Processing Semantic Scholar JSON...")
     count = 0
     semantic_scholar_json = open(args.semantic_scholar_data_path, 'r')
-    for paper in semantic_scholar_json:
+    s2_ids = open(os.path.join("s2_ids.txt"), 'w')
+    for paper in tqdm(semantic_scholar_json):
         json_obj = json.loads(paper)
         json_obj_urls = json_obj['pdfUrls']
 
         # We only need one copy per publication.
         if len(json_obj_urls) >= 1:
             paper_id = json_obj['id']
-            paper_url = json_obj_urls[0]
-
-            try:
-                content = extract_pdf_content(paper_url)
-                if content is not None:
-                    paper_json_path = os.path.join(args.save_dir, paper_id + ".json")
-                    with open(paper_json_path, 'w') as f:
-                        f.write(content)
-                        count += 1
-
-                print("\rPapers collected: {}".format(count), end="")
-                sys.stdout.flush()
-            except KeyboardInterrupt:
-                print("Stopping collection early.")
-                sys.exit()
-            except:
-                pass  # Ignore malformed data.
-
-
+            print(paper_id, file=s2_ids)
+            count += 1
 
     print()
-    print(count, "research papers collected!")
+    print(count, "research IDs collected!")
 
 
 if __name__ == "__main__":
