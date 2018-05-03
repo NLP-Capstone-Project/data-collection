@@ -41,7 +41,7 @@ def main():
     # Collect urls of all research papers
     print("Processing Semantic Scholar JSON...")
     count = 0
-    semantic_scholar_json = open(args.semantic_scholar_json_path, 'r')
+    semantic_scholar_json = open(args.semantic_scholar_data_path, 'r')
     for paper in semantic_scholar_json:
         json_obj = json.loads(paper)
         json_obj_urls = json_obj['pdfUrls']
