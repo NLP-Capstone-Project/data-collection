@@ -40,23 +40,33 @@ def main():
 
     # Collect urls of all research papers
     print("Processing Semantic Scholar JSON...")
-    papers = extract_pdf_urls_from_json(args.semantic_scholar_data_path)
-    print(len(papers), "with explicit PDFs available!\n")
-    print("Collecting ")
     count = 0
-    for paper_id, paper_url in tqdm(papers):
-        try:
-            content = extract_pdf_content(paper_url)
-            if content is not None:
-                paper_json_path = os.path.join(args.save_dir, paper_id + ".json")
-                with open(paper_json_path, 'w') as f:
-                    f.write(content)
-                    count += 1
-        except KeyboardInterrupt:
-            print("Stopping collection early.")
-            break
-        except:
-            pass  # Ignore malformed data.
+    semantic_scholar_json = open(args.semantic_scholar_json_path, 'r')
+    for paper in semantic_scholar_json:
+        json_obj = json.loads(paper)
+        json_obj_urls = json_obj['pdfUrls']
+
+        # We only need one copy per publication.
+        if len(json_obj_urls) >= 1:
+            paper_id = json_obj['id']
+            paper_url = json_obj_urls[0]
+
+            try:
+                content = extract_pdf_content(paper_url)
+                if content is not None:
+                    paper_json_path = os.path.join(args.save_dir, paper_id + ".json")
+                    with open(paper_json_path, 'w') as f:
+                        f.write(content)
+                        count += 1
+            except KeyboardInterrupt:
+                print("Stopping collection early.")
+                break
+            except:
+                pass  # Ignore malformed data.
+
+        print("\rPapers collected: {}".format(count), end="")
+        sys.stdout.flush()
+        count += 1
 
     print()
     print(count, "research papers collected!")
