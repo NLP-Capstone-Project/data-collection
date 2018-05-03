@@ -59,15 +59,16 @@ def main():
                     with open(paper_json_path, 'w') as f:
                         f.write(content)
                         count += 1
+
+                print("\rPapers collected: {}".format(count), end="")
+                sys.stdout.flush()
             except KeyboardInterrupt:
                 print("Stopping collection early.")
-                break
+                sys.exit()
             except:
                 pass  # Ignore malformed data.
 
-        print("\rPapers collected: {}".format(count), end="")
-        sys.stdout.flush()
-        count += 1
+
 
     print()
     print(count, "research papers collected!")
