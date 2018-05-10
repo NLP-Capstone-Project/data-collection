@@ -24,18 +24,6 @@ def main():
     if not os.path.exists(args.semantic_scholar_data_path):
         raise ValueError("Semantic Scholar data path needed for collection.")
 
-    try:
-        if os.path.exists(args.save_dir):
-            # save directory already exists, do we really want to overwrite?
-            input("Directory for paper data {} already exists. Press <Enter> "
-                  "to clear, overwrite and continue , or "
-                  "<Ctrl-c> to abort.".format(args.save_dir))
-            shutil.rmtree(args.save_dir)
-        os.makedirs(args.save_dir)
-    except KeyboardInterrupt:
-        print()
-        sys.exit(0)
-
     # Collect urls of all research papers
     print("Processing Semantic Scholar JSON...")
     count = 0
