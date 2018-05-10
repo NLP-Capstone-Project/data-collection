@@ -17,9 +17,8 @@ def main():
                         help="Path to the Semantic Scholar data.")
     parser.add_argument("--save-dir", type=str,
                         default=os.path.join(
-                            project_root, "data", "papers"),
-                        help="Directory to save research content as"
-                             "JSON files.")
+                            project_root, "data"),
+                        help="Directory to save the paper IDs.")
     args = parser.parse_args()
 
     if not os.path.exists(args.semantic_scholar_data_path):
@@ -41,12 +40,14 @@ def main():
     print("Processing Semantic Scholar JSON...")
     count = 0
     semantic_scholar_json = open(args.semantic_scholar_data_path, 'r')
-    s2_ids = open(os.path.join("s2_ids.txt"), 'w')
+    s2_ids = open(os.path.join(args.save_dir,
+                               args.semantic_scholar_data_path + ".txt"), 'w')
     ids = set()
     for paper in tqdm(semantic_scholar_json):
         json_obj = json.loads(paper)
         sources = json_obj["sources"]
-        if "Medline" in sources:
+        pubmed = json_obj["pmid"]
+        if "Medline" in sources or pubmed:
             paper_id = json_obj['id']
             if paper_id not in ids:
                 ids.add(paper_id)
