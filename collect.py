@@ -42,13 +42,16 @@ def main():
     count = 0
     semantic_scholar_json = open(args.semantic_scholar_data_path, 'r')
     s2_ids = open(os.path.join("s2_ids.txt"), 'w')
+    ids = set()
     for paper in tqdm(semantic_scholar_json):
         json_obj = json.loads(paper)
         sources = json_obj["sources"]
         if "Medline" in sources:
             paper_id = json_obj['id']
-            print(paper_id, file=s2_ids)
-            count += 1
+            if paper_id not in ids:
+                ids.add(paper_id)
+                print(paper_id, file=s2_ids)
+                count += 1
 
     print()
     print(count, "research IDs collected!")
