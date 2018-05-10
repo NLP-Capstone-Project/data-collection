@@ -6,8 +6,6 @@ import sys
 
 from tqdm import tqdm
 
-from collection_utils import extract_pdf_content, extract_pdf_urls_from_json
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -46,10 +44,8 @@ def main():
     s2_ids = open(os.path.join("s2_ids.txt"), 'w')
     for paper in tqdm(semantic_scholar_json):
         json_obj = json.loads(paper)
-        json_obj_urls = json_obj['pdfUrls']
-
-        # We only need one copy per publication.
-        if len(json_obj_urls) >= 1:
+        sources = json_obj["sources"]
+        if "Medline" in sources:
             paper_id = json_obj['id']
             print(paper_id, file=s2_ids)
             count += 1
